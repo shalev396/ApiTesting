@@ -9,7 +9,7 @@ describe("GET /VPD/:add and /ANP", () => {
     expect(response.statusCode).toBe(200);
   });
   it("GET /ANP should respond with status code 200", async () => {
-    const response = await request(app).get("/VPD/:add");
+    const response = await request(app).get("/ANP");
     expect(response.statusCode).toBe(200);
   });
 });
