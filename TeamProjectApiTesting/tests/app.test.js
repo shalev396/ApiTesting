@@ -1,11 +1,15 @@
-//use "node test" to run
+//use "npm test" to run
 const request = require("supertest");
 //const express = require('express');//not in use
 const app = require("../server.js"); // Adjust this path to point to your Express app
 //integration test
-describe("GET /data/auth", () => {
-  it("should respond with status code 200", async () => {
-    const response = await request(app).get("/data/auth");
+describe("GET /VPD/:add and /ANP", () => {
+  it("/VPD/:add should respond with status code 200", async () => {
+    const response = await request(app).get("/VPD/:add");
+    expect(response.statusCode).toBe(200);
+  });
+  it("GET /ANP should respond with status code 200", async () => {
+    const response = await request(app).get("/VPD/:add");
     expect(response.statusCode).toBe(200);
   });
 });
