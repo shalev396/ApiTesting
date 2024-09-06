@@ -1,61 +1,10 @@
-//use "npm test" to run tests
+//use "npm run test:unit" to ruun the tests
 const axios = require("axios");
 const request = require("supertest");
 const app = require("../server.js");
 jest.mock("axios"); //used jest docs for any mock function https://jestjs.io/docs/mock-functions
-//integration test
-describe("Integration Tests for fakestoreapi.com", () => {
-  it("GET /VPD/:add with valid parameters should respond with 200", async () => {
-    const response = await request(app).get("/VPD/true?prodId=1&userId=1");
-    expect(response.statusCode).toBe(200);
-  });
-
-  it("GET /VPD/:add with invalid product ID should return a 404", async () => {
-    const response = await request(app).get("/VPD/true?prodId=999999&userId=1");
-    expect(response.statusCode).toBe(404);
-  });
-
-  it("GET /VPD/:add with valid product but no add flag should return product details", async () => {
-    const response = await request(app).get("/VPD/false?prodId=1&userId=1");
-    expect(response.body).toHaveProperty("name");
-  });
-
-  it("GET /VPD/:add with rating should return rating details", async () => {
-    const response = await request(app).get("/VPD/false?prodId=1&userId=1");
-    expect(response.body).toHaveProperty("rating");
-  });
-
-  it("GET /ANP with valid data should respond with 200", async () => {
-    const response = await request(app).get(
-      "/ANP?title=Test%20Title&price=100&description=Great%20Product&image=https://i.pravatar.cc&category=electronics"
-    );
-    expect(response.statusCode).toBe(200);
-  });
-
-  it("GET /ANP without providing any query parameters should use defaults", async () => {
-    const response = await request(app).get("/ANP");
-    expect(response.body.title).toBe("default title");
-    expect(response.body.price).toBe("0");
-  });
-  //unfinished
-  it("GET /ANP with invalid category should return an error (check category constraints)", async () => {
-    const response = await request(app).get("/ANP?category=invalid_category");
-    expect(response.statusCode).toBe(400);
-  });
-
-  it("GET /VPD/:add without product ID should use default values", async () => {
-    const response = await request(app).get("/VPD/true");
-    expect(response.body.name).toBeDefined();
-  });
-
-  it("GET /VPD/:add without userId should still return the product", async () => {
-    const response = await request(app).get("/VPD/true?prodId=2");
-    expect(response.body).toHaveProperty("name");
-  });
-});
 //unit test
-//used mockResolvedValue to simulate the successful resolution of that request
-//used mockRejectedValue to simulate the unsuccessful resolution of that request
+//used mockResolvedValue/mockRejectedValue to simulate the successful/unsuccessful resolution of that request
 describe("Unit Tests for localhost:3000/", () => {
   //from https://jestjs.io/docs
   beforeEach(() => {
@@ -138,7 +87,7 @@ describe("Unit Tests for localhost:3000/", () => {
         price: "0",
         description: "default description",
         image: "https://i.pravatar.cc",
-        category: "default category",
+        category: "electronics",
       },
     });
     const response = await request(app).get("/ANP");
@@ -148,7 +97,7 @@ describe("Unit Tests for localhost:3000/", () => {
   it("GET /VPD/:add should handle invalid product ID with error", async () => {
     axios.get.mockRejectedValue(new Error("Product not found"));
     const response = await request(app).get("/VPD/false?prodId=9999");
-    expect(response.statusCode).toBe(500); // Assuming the server sends 500 on error
+    expect(response.statusCode).toBe(500);
   });
   //used stuck overflow for trouble shooting
   it("GET /VPD/:add should handle API failure", async () => {
@@ -157,5 +106,3 @@ describe("Unit Tests for localhost:3000/", () => {
     expect(response.statusCode).toBe(500);
   });
 });
-
-//the"fakestoreapi.com" crashed/stoped working mid testing so some of the tests remain unfinished

@@ -4,18 +4,20 @@ const express = require("express");
 require("dotenv").config();
 const app = express();
 const port = 3000;
-
 //use this template
 ///http://localhost:3000/VPD/true?prodId=3&userId=4
 app.get("/VPD/:add", async (req, res) => {
   try {
     const prodId = req.query.prodId || 1; // default to 1 if not provided
     const userId = req.query.userId || 1; // default to 1 if not provided
-    const add = req.params.add;
+    const add = req.params.add || 1; // default to 1 if not provided
     const response = await axios.get(
       `https://fakestoreapi.com/products/${prodId}`
     );
     console.log(response);
+    if (!response.data) {
+      return res.status(404).json({ error: "Product not found" });
+    }
     if (add === "true") {
       let headers = {
         "Content-Type": "application/json",
@@ -68,32 +70,44 @@ app.get("/ANP", async (req, res) => {
     const price = req.query.price || "0"; // default price of 0
     const description = req.query.description || "default description";
     const image = req.query.image || "https://i.pravatar.cc"; // Default image URL
-    const category = req.query.category || "default category";
-
-    let headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    };
-    const data = {
-      title: title,
-      price: price,
-      description: description,
-      image: image,
-      category: category,
-    };
-    const response = await axios.post(
-      `https://fakestoreapi.com/products`,
-      data,
-      headers
-    );
-    res.json(response.data);
+    const category = req.query.category || "electronics"; //default category
+    if (
+      ![
+        "electronics",
+        "jewelery",
+        "men's clothing",
+        "women's clothing",
+      ].includes(category)
+    ) {
+      console.error("post error");
+      res.status(400).send("invalid category");
+    } else {
+      let headers = {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      };
+      const data = {
+        title: title,
+        price: price,
+        description: description,
+        image: image,
+        category: category,
+      };
+      const response = await axios.post(
+        `https://fakestoreapi.com/products`,
+        data,
+        headers
+      );
+      res.json(response.data);
+    }
   } catch (err) {
     console.error("server error", err);
-    res.status(500).send("Server Error");
+    res.status(400).send("Server Error");
   }
 });
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
 module.exports = app;
