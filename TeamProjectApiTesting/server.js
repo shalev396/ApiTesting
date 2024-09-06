@@ -1,8 +1,7 @@
+// use "npm start" to run the server
 const axios = require("axios");
 const express = require("express");
-
 require("dotenv").config();
-
 const app = express();
 const port = 3000;
 
@@ -38,7 +37,7 @@ app.get("/VPD/:add", async (req, res) => {
       if (response.data.rating) {
         res.json({
           //shows only the required values
-          name: response.data.title,
+          title: response.data.title,
           description: response.data.description,
           price: response.data.price,
           category: response.data.category,
@@ -61,7 +60,6 @@ app.get("/VPD/:add", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
-
 //use this us a template
 //http://localhost:3000/ANP?title=Test%20Title&price=100&description=Great%20Product&image=https://i.pravatar.cc&category=electronics
 app.get("/ANP", async (req, res) => {
