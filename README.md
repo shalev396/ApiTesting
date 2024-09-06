@@ -1,4 +1,4 @@
-# Node-SQL-Server API Testing Project
+# Node-Server API Testing Project
 
 This is a Node.js project that integrates with the [Fake Store API](https://fakestoreapi.com/docs). The project implements API endpoints that allow users to view and add products, and it includes unit and integration testing for the API functionality using Jest and Supertest.
 
