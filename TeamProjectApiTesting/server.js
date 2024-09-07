@@ -4,6 +4,7 @@ const express = require("express");
 require("dotenv").config();
 const app = express();
 const port = 3000;
+//View Product Details
 //use this template
 ///http://localhost:3000/VPD/true?prodId=3&userId=4
 app.get("/VPD/:add", async (req, res) => {
@@ -62,6 +63,7 @@ app.get("/VPD/:add", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+//Add New Product (Admin)
 //use this us a template
 //http://localhost:3000/ANP?title=Test%20Title&price=100&description=Great%20Product&image=https://i.pravatar.cc&category=electronics
 app.get("/ANP", async (req, res) => {
@@ -71,14 +73,10 @@ app.get("/ANP", async (req, res) => {
     const description = req.query.description || "default description";
     const image = req.query.image || "https://i.pravatar.cc"; // Default image URL
     const category = req.query.category || "electronics"; //default category
-    if (
-      ![
-        "electronics",
-        "jewelery",
-        "men's clothing",
-        "women's clothing",
-      ].includes(category)
-    ) {
+    let responseCat = await axios.get(
+      `https://fakestoreapi.com/products/categories`
+    );
+    if (!responseCat.data.includes(category)) {
       console.error("post error");
       res.status(400).send("invalid category");
     } else {
