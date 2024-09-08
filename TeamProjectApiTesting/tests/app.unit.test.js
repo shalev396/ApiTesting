@@ -34,23 +34,16 @@ describe("Unit Tests for localhost:3000/", () => {
     expect(response.body.message).toBe("Item added to cart");
   });
 
-  it("GET /ANP should send POST request to add a product", async () => {
+  it("GET /ANP should send POST request to get categorys", async () => {
     axios.post.mockResolvedValue({
-      data: {
-        id: 1,
-        title: "New Product",
-        price: 100,
-      },
+      data: ["electronics", "jewelery", "men's clothing", "women's clothing"],
     });
     const response = await request(app).get(
       "/ANP?title=New%20Product&price=100&description=Great%20Product&image=https://i.pravatar.cc&category=electronics"
     );
-    expect(axios.post).toHaveBeenCalledWith(
-      "https://fakestoreapi.com/products",
-      expect.any(Object),
-      expect.any(Object)
+    expect(axios.get).toHaveBeenCalledWith(
+      "https://fakestoreapi.com/products/categories"
     );
-    expect(response.body.title).toBe("New Product");
   });
 
   it("GET /VPD/:add should return product details without adding to cart", async () => {
@@ -78,20 +71,6 @@ describe("Unit Tests for localhost:3000/", () => {
     });
     const response = await request(app).get("/VPD/false?prodId=1");
     expect(response.body).not.toHaveProperty("rating");
-  });
-
-  it("GET /ANP should handle default parameters", async () => {
-    axios.post.mockResolvedValue({
-      data: {
-        title: "default title",
-        price: "0",
-        description: "default description",
-        image: "https://i.pravatar.cc",
-        category: "electronics",
-      },
-    });
-    const response = await request(app).get("/ANP");
-    expect(response.body.title).toBe("default title");
   });
   //used stuck overflow for trouble shooting
   it("GET /VPD/:add should handle invalid product ID with error", async () => {
