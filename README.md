@@ -126,3 +126,6 @@ Integration Tests for fakestoreapi.com
 Test Suites: 1 passed, 1 total
 Tests:       9 passed, 9 total
 ```
+## License
+
+Android Project Fleemarket © 2024 by Shalev Ben Moshe is licensed under Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International. To view a copy of this license, visit [Creative Commons](https://creativecommons.org/licenses/by-nc-nd/4.0/).
